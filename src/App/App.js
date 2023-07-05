@@ -1,21 +1,27 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 // Pages
-import Home from "../pages/Home";
-import Shoes from "../pages/Shoes";
-import Shoppers from "../pages/Shoppers";
+
+import { Login, NavBar, Signup, UserHome, HomePage } from "../components";
+import PrivateRoute from "../Utils/Auth";
 
 function App() {
   return (
     <Router>
-      {/* <div className="App">
-        <Home />
-      </div> */}
-
+      <NavBar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/allShoes" element={<Shoes />} />
-        <Route path="/allShoppers" element={<Shoppers />} />
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/login"
+          element={<Login name="login" displayName="Log In" />}
+        />
+        <Route
+          path="/signup"
+          element={<Signup name="signup" displayName="Sign Up" />}
+        />
+        <Route element={<PrivateRoute />}>
+          <Route path="/home" element={<UserHome />} />
+        </Route>
       </Routes>
     </Router>
   );

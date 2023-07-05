@@ -1,17 +1,13 @@
-import axios from "axios";
-import { applyMiddleware, createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { createLogger } from "redux-logger";
 import thunkMiddleware from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
-
 import rootReducer from "./root-reducer";
 
-const logger = createLogger({ collapsed: true });
-
-const middleWare = composeWithDevTools(
-  applyMiddleware(thunkMiddleware.withExtraArgument({ axios }), logger)
+const middleware = composeWithDevTools(
+  applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
 );
-
-const store = createStore(rootReducer, middleWare);
+const store = createStore(rootReducer, middleware);
 
 export default store;
+export * from "./user";
