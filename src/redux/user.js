@@ -1,4 +1,5 @@
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 /**
  * ACTION TYPES
@@ -22,17 +23,38 @@ const removeUser = () => ({ type: REMOVE_USER });
  */
 export const me = () => async (dispatch) => {
   try {
-    const res = await axios.get("http://localhost:8080/auth/me");
+    const res = await axios.get("http://localhost:8080/auth/me", {
+      withCredentials: true,
+    });
+    console.log("ME RESPONSE", res.data);
     dispatch(getUser(res.data || defaultUser));
   } catch (err) {
     console.error(err);
   }
 };
 
-export const auth = (email, password, method) => async (dispatch) => {
+export const login = (email, password) => async (dispatch) => {
   let res;
   try {
-    res = await axios.post(`http://localhost:8080/auth/${method}`, {
+    res = await axios.post(`http://localhost:8080/auth/login`, {
+      email,
+      password,
+    });
+  } catch (authError) {
+    return dispatch(getUser({ error: authError }));
+  }
+  try {
+    dispatch(getUser(res.data));
+    // history.push("/home");
+  } catch (dispatchOrHistoryErr) {
+    console.error(dispatchOrHistoryErr);
+  }
+};
+
+export const signup = (email, password) => async (dispatch) => {
+  let res;
+  try {
+    res = await axios.post(`http://localhost:8080/auth/signup`, {
       email,
       password,
     });

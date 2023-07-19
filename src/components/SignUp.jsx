@@ -1,30 +1,26 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import { auth } from "../redux/store";
 import { useNavigate } from "react-router-dom";
+import { signup } from "../redux/user";
 
-/**
- * COMPONENT
- */
-const AuthForm = ({ name, displayName }) => {
+export default function SignUp() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const error = useSelector((state) => state.user.error);
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    const formName = name;
-    const email = evt.target.email.value;
-    const password = evt.target.password.value;
-    dispatch(auth(email, password, formName));
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const name = event.target.name;
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    dispatch(signup(email, password, name));
 
     navigate("/home");
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit} name={name}>
+      <form onSubmit={handleSubmit} name="signup">
         <div>
           <label htmlFor="email">
             <small>Email</small>
@@ -38,22 +34,11 @@ const AuthForm = ({ name, displayName }) => {
           <input name="password" type="password" />
         </div>
         <div>
-          <button type="submit">{displayName}</button>
+          <button type="submit">Sign Up</button>
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <a href="http://localhost:8080/auth/google">{displayName} with Google</a>
+      <a href="http://localhost:8080/auth/google">Sign up with Google</a>
     </div>
   );
-};
-
-/**
- * PROP TYPES
- */
-AuthForm.propTypes = {
-  name: PropTypes.string.isRequired,
-  displayName: PropTypes.string.isRequired,
-};
-
-export const Login = AuthForm;
-export const Signup = AuthForm;
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "../redux/store";
 
@@ -9,17 +9,16 @@ const LinkButton = ({ to, children, onClick }) => (
   </NavLink>
 );
 
-const NavBar = () => {
+const NavBar = ({ isLoggedIn }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => !!state.user.id);
 
-  const handleLogOut = (e) => {
-    e.preventDefault();
+  const handleLogOut = (event) => {
+    event.preventDefault();
     dispatch(logout());
     navigate("/login");
   };
-
+  console.log("isLoggedIn", isLoggedIn);
   return (
     <div>
       <h1>TTP Front End</h1>

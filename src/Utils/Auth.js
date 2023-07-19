@@ -1,8 +1,13 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Outlet, Navigate } from "react-router-dom";
+import { me } from "../redux/user";
 
-export default function PrivateRoute() {
-  const authorizedUser = useSelector((state) => !!state.user.id);
+export default function ProtectedRoute({ isloggedIn }) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(me());
+  }, [dispatch]);
 
-  return authorizedUser ? <Outlet /> : <Navigate to="/login" />;
+  return isloggedIn ? <Outlet /> : <Navigate to="/login" />;
 }
